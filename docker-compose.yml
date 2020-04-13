@@ -1,0 +1,29 @@
+version: '2'
+services:
+
+    rabbitmq:
+        image: 'rabbitmq'
+        container_name: 'rabbitmq'
+        networks:
+        - micro-net
+        expose:
+            - 5672
+
+    consume:
+        build: './src'
+        container_name: 'consume'
+        networks:
+        - micro-net
+        depends_on:
+        - rabbitmq
+    
+    emit:
+        build: './provider'
+        container_name: 'emit'
+        networks:
+        - micro-net
+        depends_on:
+        - consume
+
+networks:
+    micro-net:
